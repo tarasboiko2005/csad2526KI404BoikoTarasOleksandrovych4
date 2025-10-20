@@ -95,3 +95,128 @@ Make the source glob recursive.
 Add a top-level target for a library instead of an executable.
 Add support for tests with CTest.
 Which would you prefer?
+
+Request: Add Google Test and create target for unit tests
+Response: I'll read CMakeLists.txt and the test files to determine the current state and then update CMake to add GoogleTest and a proper test target that links a math_operations library. Expected outcome: CMakeLists.txt will create a math_operations library and a test executable that links GoogleTest and the library.
+
+Read CMakeLists.txt
+
+I'm going to (1) update the todo list, then (2) replace CMakeLists.txt to add a math_operations library target, FetchContent GoogleTest when BUILD_TESTS=ON, and a test target linking the library and gtest. Expected outcome: clean test integration and a reusable library target.
+
+Starting (1/2) Update CMake to add library and tests
+
+I'll update CMakeLists.txt now to implement the described changes.
+
+CMakeLists.txt+66-9
+Starting (2/2) Verify build instructions
+
+Progress update: I updated CMakeLists.txt to create a reusable math_operations library and a proper GoogleTest-based test target.
+
+Changes made
+
+Minimum CMake version raised to 3.14.
+Created a math_operations STATIC library:
+Prefer math_operations.cpp at project root; otherwise build from src/ sources.
+Exposes include/ as a public include directory.
+If src/main.cpp exists, an executable target ${EXE_NAME} is created and linked to math_operations.
+Tests:
+When -DBUILD_TESTS=ON, FetchContent downloads GoogleTest release 1.12.1.
+A test executable ${PROJECT_NAME}_tests is created using unit_tests.cpp at project root if present, otherwise unit_tests.cpp.
+The test target links against math_operations if present; otherwise math_operations.cpp is added to the test target.
+Tests are registered with CTest.
+How to build & run tests (PowerShell)
+
+Notes and next steps
+
+If you'd prefer the test target name or layout changed, I can adjust it.
+If you want me to run the configure/build/test steps here to verify, say so and I'll run them in PowerShell and report the results.
+
+Request: // Create Google Test unit tests for the add function from math_operations.h
+Response: I'll (1) add a short todo list, (2) open the existing test files to avoid duplicates, and (3) create or update the Google Test unit test file(s) so there are clear tests for add(int,int). I'll read both unit_tests.cpp and unit_tests.cpp and then update the appropriate file.
+
+Created 3 todos
+
+I'll read unit_tests.cpp and unit_tests.cpp to see current contents and decide where to put/update tests.
+
+Read unit_tests.cpp
+
+Read unit_tests.cpp
+
+Progress update: unit_tests.cpp already contains several Google Test cases for add. unit_tests.cpp is empty. Next I'll mark the todo and ask whether you want changes or to run tests; since tests exist, I will not modify files.
+
+Completed (1/3) Check existing test files
+
+I checked your repository and you already have Google Test unit tests for add in unit_tests.cpp. No changes were necessary.
+
+Summary of what's already present
+
+unit_tests.cpp — contains Google Test cases:
+PositiveNumbers: add(1,2) and add(100,200)
+NegativeNumbers: add(-1,-2) and add(-100,50)
+Zero: add(0,0) and add(0,5)
+LargeValues: add(1000000,2000000)
+Next steps I can take
+
+Run CMake to configure, build, and run the tests in your environment to verify they pass (I'll run the PowerShell commands if you want).
+Move tests to unit_tests.cpp at repo root or rename files if you want a different layout.
+Add a library target for math_operations in CMakeLists.txt and link the tests against it (cleaner than compiling math_operations.cpp into the test target).
+Add CI (GitHub Actions) to run the tests automatically.
+Which would you like next?
+
+Request: // Create a simple header with function declaration: int add(int a, int b);
+Response: I'll (1) write a short todo list, (2) read the existing math_operations.h to avoid overwriting useful content, then (3) update/create the header with the int add(int a, int b); declaration and include guards. Expected outcome: math_operations.h contains a safe header with include guards/pragma once and the function declaration.
+
+Starting (1/3) Inspect existing header
+
+I'll open math_operations.h to see what's already there.
+
+Read math_operations.h
+
+I'll write the header with include guard, brief comment, and the function declaration. Then I'll mark the todo progress.
+
+math_operations.h+10-1
+Completed (1/3) Inspect existing header
+
+Done — I added a simple header.
+
+What changed
+
+math_operations.h now contains:
+#pragma once
+A short comment
+Declaration: int add(int a, int b);
+Next steps (optional)
+
+I can add math_operations.cpp implementing add.
+I can add a small main.cpp that uses add and prints the result.
+I can update CMakeLists.txt to build the new files (it already glob-matches src/*.cpp, so if you place sources in src/ they will be built).
+Which of these would you like me to do?
+
+Request: // Implement the add function declared in math_operations.h
+Response: I'll read the current math_operations.h and math_operations.cpp to determine whether add is already implemented; outcome: I'll know what edit is needed and then implement add if necessary.
+
+Read math_operations.h
+
+Read math_operations.cpp
+
+Progress update: I read math_operations.h (it declares int add(int a, int b);) and math_operations.cpp (currently empty). Next I'll implement the function in math_operations.cpp with a straightforward definition and a short comment.
+
+math_operations.cpp+12-1
+Completed (3/3) Optional: add source file
+
+I've implemented the function.
+
+What I changed
+
+math_operations.cpp now contains:
+#include "math_operations.h"
+Implementation:
+int add(int a, int b) { return a + b; }
+Next steps (optional)
+
+Add a main.cpp in src/ that calls add and prints the result to verify the build.
+Run CMake + build to verify the project compiles (I can run these in PowerShell if you'd like).
+Add unit tests for add.
+Which of those would you like me to do next?
+
+Request: 
