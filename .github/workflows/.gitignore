@@ -1,14 +1,23 @@
+# Build folders
+/build/
+/build/*
 build/
-*.vcxproj.user
-*.tlog
+
+# CMake cache
+CMakeCache.txt
+CMakeFiles/
+*.cmake
+
+# Visual Studio
+*.sln
+*.vcxproj*
+*.user
 *.obj
 *.pdb
 *.exe
 *.lib
-*.log
-CMakeFiles/
-CMakeCache.txt
-*.sln
-*.dir/
-Testing/
-_deps/
+*.dll
+
+# macOS / Linux artifacts
+*.o
+*.out
