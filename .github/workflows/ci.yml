@@ -53,7 +53,9 @@ jobs:
         if: matrix.os == 'windows-latest'
         shell: pwsh
         run: |
-          if (Test-Path -Path .\ci.bat) { .\ci.bat } else { cmake -S . -B build; cmake --build build; ctest --test-dir build --output-on-failure }
+              cmake --build . --config Debug
+              ctest -C Debug --output-on-failure
+
 
       - name: Deploy (placeholder)
         run: echo "Deploy step placeholder - add deployment actions here"
