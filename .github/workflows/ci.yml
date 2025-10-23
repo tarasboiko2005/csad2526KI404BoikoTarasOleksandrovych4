@@ -22,7 +22,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Ensure CMake is available
+      - name: Ensure CMake is available (Linux)
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
@@ -30,8 +30,8 @@ jobs:
 
       - name: Ensure CMake is available (macOS)
         if: matrix.os == 'macos-latest'
-        run: |
-          brew update
+        run: | 
+          which brew || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
           brew install cmake
 
       - name: Ensure CMake is available (Windows)
@@ -39,23 +39,20 @@ jobs:
         run: |
           choco install -y cmake --installargs 'ADD_CMAKE_TO_PATH=System' || echo "choco may require admin privileges"
 
-      - name: Make CI script executable (macOS/Linux)
-        if: matrix.os != 'windows-latest'
-        run: |
-          if [ -f ./ci.sh ]; then chmod +x ./ci.sh; fi
-
       - name: Run CI script (Linux/macOS)
         if: matrix.os != 'windows-latest'
         run: |
-          if [ -f ./ci.sh ]; then ./ci.sh; else cmake -S . -B build && cmake --build build && ctest --test-dir build --output-on-failure; fi
+          cmake -S . -B build
+          cmake --build build
+          ctest --test-dir build --output-on-failure
 
       - name: Run CI script (Windows)
         if: matrix.os == 'windows-latest'
         shell: pwsh
         run: |
-              cmake --build . --config Debug
-              ctest -C Debug --output-on-failure
-
+          cmake -S . -B build
+          cmake --build build --config Debug
+          ctest --test-dir build -C Debug --output-on-failure
 
       - name: Deploy (placeholder)
         run: echo "Deploy step placeholder - add deployment actions here"
