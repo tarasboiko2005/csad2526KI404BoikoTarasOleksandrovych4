@@ -1,2 +1,2 @@
-HelloProject_add_tests 3 0.236418
+HelloProject_add_tests 4 0.201045
 ---

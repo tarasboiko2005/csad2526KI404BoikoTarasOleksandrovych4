@@ -1,10 +1,10 @@
-Start testing: Oct 22 18:17 Фінляндія (літо)
+Start testing: Oct 23 18:20 Фінляндія (літо)
 ----------------------------------------------------------
 1/1 Testing: HelloProject_add_tests
 1/1 Test: HelloProject_add_tests
-Command: "C:/Users/Admin/Desktop/csad2526KI404BoikoTarasOleksandrovych4/build/Release/HelloProject_tests.exe"
+Command: "C:/Users/Admin/Desktop/csad2526KI404BoikoTarasOleksandrovych4/build/Debug/HelloProject_tests.exe"
 Directory: C:/Users/Admin/Desktop/csad2526KI404BoikoTarasOleksandrovych4/build
-"HelloProject_add_tests" start time: Oct 22 18:17 Фінляндія (літо)
+"HelloProject_add_tests" start time: Oct 23 18:20 Фінляндія (літо)
 Output:
 ----------------------------------------------------------
 Running main() from C:\Users\Admin\Desktop\csad2526KI404BoikoTarasOleksandrovych4\build\_deps\googletest-src\googletest\src\gtest_main.cc
@@ -25,11 +25,11 @@ Running main() from C:\Users\Admin\Desktop\csad2526KI404BoikoTarasOleksandrovych
 [==========] 4 tests from 1 test suite ran. (0 ms total)
 [  PASSED  ] 4 tests.
 <end of output>
-Test time =   0.71 sec
+Test time =   0.80 sec
 ----------------------------------------------------------
 Test Passed.
-"HelloProject_add_tests" end time: Oct 22 18:17 Фінляндія (літо)
+"HelloProject_add_tests" end time: Oct 23 18:20 Фінляндія (літо)
 "HelloProject_add_tests" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-End testing: Oct 22 18:17 Фінляндія (літо)
+End testing: Oct 23 18:20 Фінляндія (літо)
