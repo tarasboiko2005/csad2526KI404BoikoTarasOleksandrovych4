@@ -1,0 +1,23 @@
+# Build folders
+/build/
+/build/*
+build/
+
+# CMake cache
+CMakeCache.txt
+CMakeFiles/
+*.cmake
+
+# Visual Studio
+*.sln
+*.vcxproj*
+*.user
+*.obj
+*.pdb
+*.exe
+*.lib
+*.dll
+
+# macOS / Linux artifacts
+*.o
+*.out

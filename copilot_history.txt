@@ -316,3 +316,52 @@ if errorlevel 1 (
 echo All steps completed successfully.
 endlocal
 exit /b 0
+
+
+Request: GitHub Actions workflow for cross-platform "Hello World" project.
+Requirements:
+1. Trigger: run on push or pull_request to branches containing "develop" or "master"
+2. Job: single job named "cross_build"
+3. Strategy: matrix for three OS: ubuntu-latest, windows-latest, macos-latest
+4. Steps:
+- Checkout code (actions/checkout@v4)
+- Install CMake if needed
+- Run build script from previous step (ci.sh or ci.bat/ci.cmd)
+- Deploy
+Please generate a complete GitHub Actions YAML workflow based on these requirements.
+
+Response: I'll read the existing workflow file (if present) to avoid overwriting useful content, then create/update ci.yml to implement the requested cross-platform workflow. Expected outcome: a complete YAML workflow matching your requirements.
+
+Read ci.yml
+
+Starting (1/2) Create GitHub Actions workflow
+
+I'll add a robust workflow that installs CMake via actions/checkout and, when needed, uses apt-get/brew/choco to install CMake or uses cmake action. Then it will run ./ci.sh on Linux/macOS and ci.bat on Windows. Finally it will include a placeholder 'Deploy' step. I'll create the YAML now.
+
+ci.yml+60-1
+Completed (1/2) Create GitHub Actions workflow
+
+I added a GitHub Actions workflow at ci.yml that matches your requirements:
+
+Triggers: on push or pull_request to branches matching "develop" or "master".
+Single job: cross_build.
+Matrix: ubuntu-latest, windows-latest, macos-latest.
+Steps:
+Checkout (actions/checkout@v4).
+Ensure CMake is available:
+apt on Ubuntu, brew on macOS, choco on Windows.
+Run platform-appropriate CI script:
+Linux/macOS: run ./ci.sh if present, otherwise run CMake configure/build/ctest commands.
+Windows: run ci.bat if present, otherwise run CMake configure/build/ctest.
+Placeholder Deploy step (prints a message).
+Notes and recommendations
+
+The workflow uses package managers to install CMake when needed. On windows-latest, Chocolatey requires elevated permissions; the action attempts to install CMake but may print a warning if it can't — you can instead add the official CMake action if you prefer.
+If you want a dedicated ci.sh for Linux/macOS, I can create one similar to ci.bat.
+For multi-configuration generators (Visual Studio) you may want to add --config Release to build and test commands; tell me if you want that change.
+I left a Deploy placeholder for you to replace with actual deployment steps (upload artifacts, publish packages, etc.).
+Would you like me to:
+
+Create ci.sh to mirror ci.bat for Linux/macOS (recommended)?
+Change the workflow to always use the CMake action instead of package managers?
+Add a step to upload build/test artifacts?
