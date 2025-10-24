@@ -19,10 +19,12 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
+      # --- Checkout ---
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Ensure CMake is available
+      # --- Встановлення CMake ---
+      - name: Ensure CMake is available (Linux)
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
@@ -31,7 +33,7 @@ jobs:
       - name: Ensure CMake is available (macOS)
         if: matrix.os == 'macos-latest'
         run: |
-          brew update
+          which brew || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
           brew install cmake
 
       - name: Ensure CMake is available (Windows)
@@ -39,23 +41,49 @@ jobs:
         run: |
           choco install -y cmake --installargs 'ADD_CMAKE_TO_PATH=System' || echo "choco may require admin privileges"
 
-      - name: Make CI script executable (macOS/Linux)
+      # --- Clean build directory (щоб уникнути помилок CMakeCache) ---
+      - name: Clean build directory (Linux/macOS)
         if: matrix.os != 'windows-latest'
-        run: |
-          if [ -f ./ci.sh ]; then chmod +x ./ci.sh; fi
+        run: rm -rf build
 
+      - name: Clean build directory (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
+        run: Remove-Item -Recurse -Force build
+
+      # --- Збірка і тести ---
       - name: Run CI script (Linux/macOS)
         if: matrix.os != 'windows-latest'
         run: |
-          if [ -f ./ci.sh ]; then ./ci.sh; else cmake -S . -B build && cmake --build build && ctest --test-dir build --output-on-failure; fi
+          cmake -S . -B build -DBUILD_TESTS=ON
+          cmake --build build
+          ctest --test-dir build --output-on-failure
 
       - name: Run CI script (Windows)
         if: matrix.os == 'windows-latest'
         shell: pwsh
         run: |
-              cmake --build . --config Debug
-              ctest -C Debug --output-on-failure
+          cmake -S . -B build -DBUILD_TESTS=ON
+          cmake --build build --config Debug
+          ctest --test-dir build -C Debug --output-on-failure
 
+      # --- Завантаження артефактів ---
+      - name: Upload build artifacts (Linux/macOS)
+        if: matrix.os != 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts-${{ matrix.os }}
+          path: |
+            build/hello
+            build/HelloProject_tests
+            build/lib/**/*.a
 
-      - name: Deploy (placeholder)
-        run: echo "Deploy step placeholder - add deployment actions here"
+      - name: Upload build artifacts (Windows)
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts-${{ matrix.os }}
+          path: |
+            build/Debug/hello.exe
+            build/Debug/HelloProject_tests.exe
+            build/lib/Debug/**/*.lib
