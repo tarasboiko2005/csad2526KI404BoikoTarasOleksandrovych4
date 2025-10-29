@@ -1,0 +1,13 @@
+# Quartus / ModelSim / симуляція
+db/
+incremental_db/
+output_files/
+simulation/
+*.bak
+*.qws
+*.rpt
+uart_top_description
+c5_pin_model_dump
+
+# Ліцензії
+*.dat
