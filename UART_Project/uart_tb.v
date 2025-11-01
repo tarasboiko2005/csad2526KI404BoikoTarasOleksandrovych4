@@ -9,30 +9,32 @@ module uart_tb;
     wire [7:0] data_out;
     wire rx_ready;
 
-    // генерація такту (1 біт = 20 ns)
+    // генерація тактового сигналу 50 MHz
     initial clk = 0;
-    always #10 clk = ~clk;
+    always #10 clk = ~clk; // 20 ns період
 
     initial begin
-        // ініціалізація
         rst = 1;
         start_tx = 0;
-        data_in = 8'h41; // символ 'A'
-        #50 rst = 0;
+        data_in = 8'h41; // 'A'
+        #100 rst = 0;
 
-        // перший байт
-        #50 start_tx = 1;
-        #20 start_tx = 0;
-
-        // другий байт
+        // передаємо 'A'
         #200 start_tx = 1;
-        data_in = 8'h42; // символ 'B'
-        #20 start_tx = 0;
+        #40 start_tx = 0;
 
-        #500 $stop;
+        // трохи чекаємо
+        #2000;
+
+        // передаємо 'B'
+        data_in = 8'h42;
+        start_tx = 1;
+        #40 start_tx = 0;
+
+        #4000;
+        $stop;
     end
 
-    // Інстанція uart_top
     uart_top uut (
         .clk(clk),
         .rst(rst),
@@ -42,4 +44,5 @@ module uart_tb;
         .data_out(data_out),
         .rx_ready(rx_ready)
     );
+
 endmodule

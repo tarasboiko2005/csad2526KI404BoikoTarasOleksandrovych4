@@ -1,18 +1,26 @@
 module uart_top(
-    input clk,
-    input rst,
-    input start_tx,
-    input [7:0] data_in,
-    output tx_line,
-    output [7:0] data_out,
-    output rx_ready
+    input  wire clk,
+    input  wire rst,
+    input  wire start_tx,
+    input  wire [7:0] data_in,
+    output wire tx_line,
+    output wire [7:0] data_out,
+    output wire rx_ready
 );
 
     wire tx_busy;
+    wire baud_clk;
 
-    // TX
-    uart_tx tx_inst (
+    // Baud rate generator
+    baud_gen #(.DIVIDER(16)) baud_gen_inst (
         .clk(clk),
+        .rst(rst),
+        .baud_clk(baud_clk)
+    );
+
+    // UART TX
+    uart_tx tx_inst (
+        .clk(baud_clk),
         .rst(rst),
         .start_tx(start_tx),
         .data_in(data_in),
@@ -20,9 +28,9 @@ module uart_top(
         .busy(tx_busy)
     );
 
-    // RX (підключаємо tx_line до rx_line)
+    // UART RX
     uart_rx rx_inst (
-        .clk(clk),
+        .clk(baud_clk),
         .rst(rst),
         .rx_line(tx_line),
         .data_out(data_out),
